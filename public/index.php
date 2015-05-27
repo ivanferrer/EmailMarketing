@@ -6,18 +6,18 @@ header('Content-Type:text/html; charset=utf-8', true);
 define('SITE_SUBFOLDER', 'http://'.$_SERVER['SERVER_NAME']);
 
 //configuração para entrar no sistema
-define('USERNAME_EMKT', 'ivan');
-define('PASSWORD_EMKT', 'teste123');
+define('USERNAME_EMKT', 'admin');
+define('PASSWORD_EMKT', 'admin');
 
 //configuração para e-mail
-define('NAME_SENDER_CLIENT', 'Venda Premiada STIHL');
-define('EMAIL_SENDER_CLIENT', 'vendapremiada@stihl.com.br'); //email para a resposta
-define('EMAIL_SENDER_SIS', 'ivanbyferrer@gmail.com'); //email do sistema
-define('PASS_SENDER_SIS', '5p6kjAzpRP3o8p75A4n9-A'); //senha do email do sistema // AK$3k_2@1LK&DMO)A*1953%
+define('NAME_SENDER_CLIENT', 'Nome Sender');
+define('EMAIL_SENDER_CLIENT', 'emailresposta@servidor.com.br'); //email para a resposta
+define('EMAIL_SENDER_SIS', 'seuemail@servidor.com'); //email do sistema
+define('PASS_SENDER_SIS', '123'); //senha do email do sistema // AK$3k_2@1LK&DMO)A*1953%
 define('PORT_MAILER',587); //PORTA DE ENVIO - define('PORT_MAILER', 465);
 define('TYPE_AUTH_SIS', 'login'); //TIPO DE AUTENTICAÇÃO (OPÇÕES: 'login', '')
 define('SSL_PROTOCOL', 'tls'); //PORTA DE ENVIO - define('SSL_PROTOCOL', ' ssl');
-define('SMTP_ACCOUNT', 'smtp.mandrillapp.com'); //PORTA DE ENVIO
+define('SMTP_ACCOUNT', 'smtp.servidor.com'); //PORTA DE ENVIO
 define('SHORTURL', false); //true or false para links incurtados;
 define('VERSAO_SHORTURL', '2.0.1');
 define('FORMAT_SHORTURL', 'xml');
