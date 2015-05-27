@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Email</title>
+        <style type="text/css">
+            body{
+                background: #fff;
+                font-family: Arial,Verdana;
+                font-size: 14px;
+            }
+            .send{
+                width: 100%;
+                background: #eee;
+                border-radius: 10px;
+                border:1px solid #ccc;
+                padding: 20px;
+                color: #999;
+                margin: 10px;
+                display: block;
+            }
+            h1{
+                color: #0398CA;
+                font-size: 25px;
+                text-align: center;
+            }
+            .fim{
+                padding:30px;
+                width: 100%;
+                text-align: center;
+                background: #eee;
+                border:1px solid #ccc;
+                display: block;
+            }
+            .content{
+                width: 80%;
+                background: #fff;
+                padding: 10px;
+                min-height: 400px;
+                margin: 10px auto;
+            }
+            #preview{
+                border:1px solid #999;
+                padding:20px;
+                border-radius:10px;
+                width:800px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <?php
+            if ($this->msg != ""):
+                ?>
+                <h1>
+                    <?php
+                    echo $this->msg;
+                    ?>
+                </h1>
+                <?php
+            else:
+                ?>
+            <h2>Remoção de E-mail</h2>
+                <p>Talvez você não esteja mais interessado em receber nossas mensagens, ofertas ou promoções.</p>
+                <p>Se não for incômodo, gostaríamos de coletar informações sobre o motivo da remoção do seu e-mail.</p>
+                <p>Desta maneira poderemos atender melhor nossos clientes oferencendo mensagens mais interessantes.</p>
+                <form action="<?php echo $this->site; ?>/index/remover-email" method="post" name="remover">
+                    <p>Diga o motivo pelo qual deseja remover seu email:</p>
+                    <p><textarea name="motivo" cols="30" rows="8"></textarea></p>
+                    <input type="hidden" name="email" value="<?php echo $this->email; ?>">
+                    <input type="submit" value="Remover E-mail">
+                </form>
+            <?php endif; ?>
+        </div>
+    </body>
+</html>

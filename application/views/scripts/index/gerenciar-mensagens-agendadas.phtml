@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Email Marketing</title>
+        <link href="<?php echo $this->site; ?>/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo $this->site; ?>/css/custom.css" rel="stylesheet" />
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+          <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+          <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+        <![endif]-->
+
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="container">
+                <div id="top-box">
+                    <h1 class="top">Gerenciar Mensagens Agendadas</h1>
+                   
+                    <p class="btn btn-default pull-right clearfix"><?php echo $this->sair; ?></p><p class="btn btn-info pull-right clearfix" style="margin-right:10px;" onclick="window.location.href='<?php echo $this->site; ?>/index';">Voltar</p>
+                    <p class="clearfix"></p>
+                    <p>Para interromper uma mensagem agendada caso ele ainda não tenha sido enviado, clique em excluir:</p>
+                    <p><small>Obs: verifique se o seu servidor contém o  processo  [ GET <?php echo $this->site; ?>/cron/envio-programado ] habilitado com a seguinte configuração de tempo: [ 5 * * * * ]: </small></p>
+                </div>
+                <form action="<?php echo $this->site; ?>/index/email-exclusao-em-massa" method="post" name="massa">
+                    <div class="obj-form">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th width="30%">Assunto</th>
+                                    <th width="30%">Template</th>
+                                    <th width="12%">Data de disparo</th>
+                                    <th width="13%">Status</th>
+                                    <th width="13%">Ação</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <?php
+                                if (!empty($this->mensagens)):
+                                    foreach ($this->mensagens as $mensagem):
+                                        $mensagem = (object) $mensagem;
+                                        ?>
+                                        <tr id="tmp_<?php echo $mensagem->agn_id ?>">
+                                            <th scope="row"><?php echo $mensagem->agn_id ?></th>
+                                            <td><?php echo $mensagem->agn_assunto; ?></td>
+                                            <td><?php echo  preg_replace('/.phtml/', '', $mensagem->agn_template); ?></td>
+                                            <td><?php echo $mensagem->agn_data_disparo; ?></td>
+                                            <td><?php echo ($mensagem->agn_status == 'enviado') ? "Enviado" : (($mensagem->agn_data_disparo <= date('d/m/Y H:i')) ? "enviando..." : "Agendado");  ?></td>
+                                            <td>&nbsp;<?php if($mensagem->agn_status == 'nao_enviado'): ?><input type="checkbox" value="<?php echo $mensagem->agn_id ?>" name="deletar[]" id="input_<?php echo $mensagem->agn_id ?>">&nbsp;&nbsp;&nbsp;<a href="#" title="Excluir" data-file-del="<?php echo $mensagem->agn_id ?>" id="tmp_<?php echo $mensagem->agn_id ?>" class="btn btn-xs btn-danger delfile"><span class="glyphicon glyphicon-remove"></span> Excluir</a><?php endif;?></td>
+                                        </tr>
+                                        <?php
+                                    endforeach;
+                                else:
+                                    ?>
+                                <th scope="row" class="text-center" colspan="6">Não há mensagens agendadas.</th>
+                                <?php
+                                endif;
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+  <div class="modal fade" id="myModalQuest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Ação do usuário</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="msg-form"></h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default ok-action" data-dismiss="modal">Sim</button>
+                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery.js"></script>
+        <script src="<?php echo $this->site; ?>/js/bootstrap.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+
+
+                $('.obj-form input[type="checkbox"]').on('click', function () {
+                    // console.log($('.table-bordered input[type="checkbox"]:checked').length);
+                    if ($('.obj-form input[type="checkbox"]:checked').length == 1 && $('.deletar-massa').length == 0) {
+                        // append item
+                        $('.obj-form').append('<div class="clearfix deletar-massa"><div class="form-group"><input type="button" onclick="deletaMassa()" class="btn btn-primary deleta-massa-btn" value="Exclusão em massa dos selecionados"></div></div>');
+
+                    } else {
+                        if ($('.obj-form input[type="checkbox"]:checked').length == 0) {
+                            $('.deletar-massa').remove();
+                        }
+                    }
+
+
+                });
+                $('.obj-form input[type="checkbox"]').each(function () {
+
+                    if ($('.obj-form input[type="checkbox"]:checked').length == 1 && $('.deletar-massa').length == 0) {
+                        // append item
+                        $('.obj-form').append('<div class="clearfix deletar-massa"><div class="form-group"><input type="button" onclick="deletaMassa()" class="btn btn-primary deleta-massa-btn" value="Exclusão em massa dos selecionados"></div></div>');
+
+                    } else {
+                        if ($('.obj-form input[type="checkbox"]:checked').length == 0) {
+                            $('.deletar-massa').remove();
+                        }
+                    }
+                });
+                
+             
+                   $('.delfile').on('click',function(){
+
+                    var id = $(this).attr('id');
+                    var oThis = $(this);
+                    var retorno = [];
+                    $('#myModalQuest').attr('class','modal fade myModalSample');
+                     confirmFX('Tem certeza que deseja excluir este agendamento?','myModalSample');
+                    
+                    $('.myModalSample .ok-action').on('click',function(){
+                        $.post('<?php echo $this->site; ?>/cron/exclusao-massa-agenda', {ids:$(oThis).attr('data-file-del')}, function (e) {
+                            var retorno = jQuery.parseJSON(e);
+                              if (retorno.success) {
+                                $('#' + id).fadeOut('slow').remove();
+                                $('<div class="alert alert-success alert-dismissible" role="alert"></div>')
+                                        .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><p>' + retorno.msg + '</p>')
+                                        .appendTo('#top-box');
+                                setTimeout(function(){
+                                    $('.alert').remove();
+                                },4000);
+                            }
+                        });
+                    });
+                });
+
+                $(document).delegate('.myModalMassa .ok-action','click',function(){
+        
+                    var array = [];
+                    $('.obj-form input[type="checkbox"]:checked').each(function (index, e) {
+                        array[index] = e.value;
+                    });
+                    var data = array.join(',');
+                    $.post('<?php echo $this->site; ?>/cron/exclusao-massa-agenda', {ids: data}, function (e) {
+                        var retorno = jQuery.parseJSON(e);
+                        if (retorno.success) {
+                            $('.obj-form input[type="checkbox"]:checked').each(function (index, e) {
+                                $('#tmp_' + e.value).fadeOut('slow').remove();
+                            });
+                            $('<div class="alert alert-success alert-dismissible" role="alert"></div>')
+                                    .html('<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><p>' + retorno.msg + '</p>')
+                                    .appendTo('#top-box');
+                            setTimeout(function () {
+                                $('.alert').remove();
+                            }, 4000);
+                        }
+                    });
+                });
+                
+            });
+            function deletaMassa() {
+            $('#myModalQuest').attr('class','modal fade myModalMassa');
+              confirmFX('Tem certeza que deseja remover o(s) agendamento(s) selecionado(s)?','myModalMassa');
+             }
+             function confirmFX(perg, modal){
+                $('.'+modal).modal("show");
+                $('.'+modal+' .msg-form').text(perg);
+            }
+            
+            
+
+        </script>
+    </body>
+</html>

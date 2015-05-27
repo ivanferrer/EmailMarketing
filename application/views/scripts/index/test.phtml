@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title id="shorturl">Teste sortUrl</title>
+
+</head>
+<body>
+    <div align="center">
+        <h1>Enviar URL</h1>
+    </div>
+    <div align="center" style="margin-top:40px">
+    <input type="text" name="url" id="url"/>
+    <input type="submit" id="short" value="Submit"/>
+    <div id="result"></div>
+    </div>
+</body>
+<script type="text/javascript" src="http://ajax.googleapis.com/
+ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function()
+    {
+
+//bit_url function
+        function bit_url(url)
+        {
+            var url=url;
+            var username="o_8bq8799qj"; // bit.ly username
+            var key="R_a55c50ad5d094443941a03b55b64ea9c";
+            $.ajax({
+                url:"http://api.bit.ly/v3/shorten",
+                data:{longUrl:url,apiKey:key,login:username},
+                dataType:"jsonp",
+                success:function(v)
+                {
+                    var bit_url=v.data.url;
+                    $("#result").html('<a href="'+bit_url+'" target="_blank">'+bit_url+'</a>');
+                }
+            });
+        }
+
+
+        $("#short").click(function()
+        {
+            var url=$("#url").val();
+            var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+            var urltest=urlRegex.test(url);
+            if(urltest)
+            {
+                bit_url(url);
+            }
+            else
+            {
+                alert("Bad URL");
+            }
+        });
+
+    });
+</script>
+
+</html>

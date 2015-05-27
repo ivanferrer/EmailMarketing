@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Email Marketing</title>
+        <link href="<?php echo $this->site; ?>/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo $this->site; ?>/css/custom.css" rel="stylesheet" />
+
+
+    </head>
+    <body>
+        <div id="wrap">
+            <h1 class="top">Cadastre emails separados por vírgula</h1>
+               <p class="btn btn-default pull-right clearfix"><?php  echo $this->sair; ?></p>
+               <p class="clearfix"></p>
+            <?php if ($this->msg != ""): ?>
+                <div class="alert alert-<?php echo $this->classe;?> alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php echo $this->msg; ?>
+                </div>
+            <?php endif; ?>
+            <form action="<?php echo $this->site; ?>/index/cadastrar-emails" method="post">
+                <div class="form-group">
+                    <label for="InputEmails">Emails:</label>
+                    <textarea name="emails"  class="form-control" rows="18" id="emails"></textarea>
+                </div>
+                <input type="submit" class="btn btn-primary" value="Cadastrar">&nbsp;&nbsp;&nbsp;<input type="button"  class="btn btn-info" onclick="location.href = '<?php echo $this->site; ?>/index';" value="Voltar">
+            </form>
+            <br>
+            <p class="clearfix">Se preferir, importe o dados através do formulário abaixo:</p>
+            <p><small>Obs: para incluir informações dinâmicas ao cadastro do usuário, na planilha preencha os campos da planilha com os dados na tag {texto_dinamico: Seu texto aqui }</small></p>
+
+            <form action="<?php echo $this->site; ?>/index/importar-emails" method="post" class="form-inline" enctype="multipart/form-data">
+                <div class="form-group">
+                    <input type="file" name="emails">
+                </div>
+                <input type="submit"  class="btn btn-primary" value="Importar">
+            </form><br>
+        </div>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="<?php echo $this->site; ?>/js/bootstrap.min.js"></script>
+    </body>
+    
+</html>

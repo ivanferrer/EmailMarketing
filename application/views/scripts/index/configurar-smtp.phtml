@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Email Marketing</title>
+        <link href="<?php echo $this->site; ?>/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo $this->site; ?>/ckeditor/js/ckeditor/samples/sample.css" rel="stylesheet">
+        <link href="<?php echo $this->site; ?>/css/custom.css" rel="stylesheet" />
+    </head>
+    <body>
+        <div id="wrap">
+            <h1 class="top">Configuração do serviço de envio de Email</h1>
+            <?php if ($this->message != ""): ?>
+                <div class="alert alert-<?php echo $this->message_class?> alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <?php echo $this->message; ?>
+                </div>
+            <?php endif; ?>
+            <div class="content">
+                <p class="btn btn-default pull-right clearfix"><?php  echo $this->sair; ?><p class="btn btn-info pull-right clearfix" style="margin-right:10px;" onclick="window.location.href='<?php echo $this->site; ?>/index';">Voltar</p></p>
+                <p class="clearfix"></p>
+                <form action="<?php echo $this->site; ?>/index/configurar-smtp" method="post" name="template">
+                    <div class="form-group">
+                        <label for="InputNomeRemetente">Nome do remetente:</label>
+                        <input type="text" name="nome" value="<?php echo $this->params['nome'];?>" class="form-control" maxlength="60">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputEmailRemetente">Email do remetente:</label>
+                        <input type="text" name="email" value="<?php echo $this->params['email'];?>" autocomplete="off" class="form-control" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLoginSis">Email/Login para envio (sistema):</label>
+                        <input type="text" name="login" value="<?php echo $this->params['login'];?>" autocomplete="off" class="form-control" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputPassSis">Senha (sistema):</label>
+                        <input type="password"  class="form-control" value="<?php echo $this->params['senha'];?>" autocomplete="off" name="senha" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLoginSis">Protocolo de segurança:</label>
+                       <select name="ssl">
+                           <option value="inativo"<?php if($this->params['ssl']=='inativo'):?> selected="selected"<?php endif;?>>Nenhum</option>
+                           <option value="ssl"<?php if($this->params['ssl']=='ssl'):?> selected="selected"<?php endif;?>>SSL</option>
+                           <option value="tls"<?php if($this->params['ssl']=='tls'):?> selected="selected"<?php endif;?>>TLS</option>
+                       </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="InputLoginSis">Porta:</label>
+                        <input type="text" name="port" class="form-control" value="<?php echo $this->params['port'];?>" maxlength="4">
+                    </div>
+                    <div class="form-group">
+                        <label for="InputEmailRemetente">SMTP de saída:</label>
+                        <input type="text" name="smtp" value="<?php echo $this->params['smtp'];?>" class="form-control" maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" class="form-control" name="id" value="1" maxlength="50">
+                        <input type="submit" class="btn btn-primary" value="Entrar">
+                    </div>
+                </form>
+
+                <br>
+            </div>
+        </div>
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    </body>
+</html>

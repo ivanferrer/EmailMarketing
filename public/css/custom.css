@@ -1,0 +1,65 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 13/10/2014, 17:43:18
+    Author     : Progiro
+*/
+body{
+    background: #fff;
+    font-family: Arial,Verdana;
+    font-size: 14px;
+}
+ol li{
+    line-height: 28px;
+    font-size: 14px;
+}
+#wrap{
+    width: 980px;
+    margin: 0 auto;
+    border: 1px solid #eee;
+    padding: 0 30px;
+
+}
+h1.top{
+    background: url(../img/top.jpg) left top no-repeat;
+    padding:10px 20px;
+    width: 980px;
+}
+
+.send{
+    width: 100%;
+    background: #eee;
+    border-radius: 10px;
+    border:1px solid #ccc;
+    padding: 20px;
+    color: #999;
+    margin: 10px;
+    display: block;
+}
+
+.fim{
+    padding:30px;
+    width: 100%;
+    text-align: center;
+    background: #eee;
+    border:1px solid #ccc;
+    display: block;
+}
+
+#preview{
+    border:1px solid #ccc;
+    padding:20px;
+    border-radius:10px;
+    width:100%;
+}
+
+
+@media (min-width: 1200px){
+    .container {
+        width: 920px;
+    }
+}
+

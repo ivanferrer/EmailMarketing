@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Email Marketing</title>
+        <link href="<?php echo $this->site; ?>/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo $this->site; ?>/css/custom.css" rel="stylesheet" />
+
+
+    </head>
+    <body>
+        <div id="wrap">
+            <h1 class="top">Envio de mensagem</h1>
+            <p class="btn btn-default pull-right clearfix"><?php echo $this->sair; ?></p>
+            <p class="clearfix"></p>
+            <div class="content">
+                <?php if( $this->porcentagem > 0): ?>
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="<?php echo $this->porcentagem; ?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $this->porcentagem; ?>%;">
+                       <?php echo $this->porcentagem; ?>%
+                    </div>
+                </div>
+                <?php endif;?>
+                <?php echo $this->msg; ?>
+                <?php echo ($this->layout != "") ? '<div id="preview">' . $this->partial($this->layout) . '</div>' : ""; ?>
+                <br>
+            </div>
+            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Teste de Mensagem</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="error-msg"></div>
+                            <label>Preencha os emails separados por vírgula ou ponto e vírgula:</label>
+                            <input type="text" id="emails" name="mails" class="form-control">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-primary send-test">Enviar Teste</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModalSucess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Sucesso no envio</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="msg-form"></h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+             <div class="modal fade" id="myModalQuest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabelOne">Envio de Mensagem</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="msg-form">Tem certeza que deseja enviar a mensagem agora?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default ok-send" data-dismiss="modal"<?php echo $this->sendScript; ?>>Sim</button>
+                             <button type="button" class="btn btn-default" data-dismiss="modal">Mais tarde</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="myModalAgend" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="myModalLabelTwo">Agendar uma mensagem</h4>
+                        </div>
+                        <div class="modal-body">
+                            <h4 class="msg-form">Defina a data do envio:</h4>
+                            <form id="calendar">
+                               <input type="datetime-local" min="<?php date('d/m/Y H:i');?>" name="data_envio" id="data_envio">
+                            </form>
+                        </div>
+                        <div class="error-msg-date"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default ok-agendar">Agendar</button>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Mais tarde</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript" src="<?php echo $this->site; ?>/js/bootstrap.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+
+                $('.ok-agendar').on('click',function() {
+                    var msgErro = 'Preencha uma Data válida';
+                    var sendDate = $('#data_envio').val();
+                    var title_msg = $('#title_msg').val();
+                    var testDate =  new Date(Date.parse(sendDate));
+                    var dataAtual = new Date('<?php echo date("j F, Y H:i:s"); ?>');
+                    var inputDate = null;
+                    var atualDate = null;
+
+
+                    var offset = -6;
+                   var utc = dataAtual.getTime() + (dataAtual.getTimezoneOffset() * 60000);
+                      dataAtual = new Date(utc + (3600000 * offset));
+                    dataAtual.setSeconds(0);
+                    testDate.setSeconds(0);
+
+                    if(dataAtual != undefined && testDate != 'Invalid Date') {
+//                        console.log('input old '+testDate);
+//                        console.log('atual old '+dataAtual);
+                        inputDate = Date.parse(testDate);
+                        atualDate = Date.parse(dataAtual);
+//
+//                        console.log('input '+inputDate);
+//                        console.log('atual '+atualDate);
+                        if (testDate != 'Invalid Date' && inputDate < atualDate) {
+                            msgErro = 'A Data precisa ser maior ou igual a data atual';
+                            testDate = 'Invalid Date';
+                        }
+                    }
+
+                    if(testDate != 'Invalid Date') {
+
+                        $('#myModalAgend').modal('hide');
+                            var data = {
+                                template: '<?php echo substr($this->layout,10); ?>',
+                                titulo: title_msg,
+                                data_envio: sendDate
+                            };
+
+                            $.post('<?php echo $this->site; ?>/cron/agendar-envio', data, function (e) {
+                                var m = jQuery.parseJSON(e);
+                                $('modal-body').html('<div class="text-center"><img src="<?php echo $this->site; ?>/img/loading.gif" width="42" height="42" border="0"></div>')
+                                if (m.success) {
+                                    $('#calendar').hide();
+                                    $('#myModalLabel').text('Agendar uma mensagem');
+                                    $('.msg-form').text(m.msg);
+                                    $('.msg-form').attr('class', 'msg-form text-' + m.classe);
+                                    $('#myModalSucess').modal('show');
+
+                                    setTimeout(function () {
+                                        $('#myModalSucess,#myModal').modal('hide');
+                                        $('#myModalLabel').text('Envio de Mensagem');
+                                       location.href='<?php echo $this->site; ?>/index/gerenciar-mensagens-agendadas';
+                                    }, 8000);
+                                } else {
+                                    mensagemErro(m.msg);
+                                }
+                            });
+
+                    } else {
+                               mensagemErroDate(msgErro);
+                    }
+                });
+
+                $('.send-test').on('click', function () {
+
+                    var emails = $('#emails').val();
+                    var title_msg =  $('#title_msg').val();
+                   
+                    emails = emails.toLowerCase();
+                    emails = emails.replace(/[\;+\,+\s+]/gi, ',');
+                    emails = emails.replace(/,,/gi, ',');
+
+                    var checkArrayMail = emails.split(',');
+
+                    for (var i = 0; i < checkArrayMail.length; i++) {
+                        var mail = checkArrayMail[i];
+                        var pattern =/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+                            if (!pattern.test(mail)) {
+                                  mensagemErro('<strong>Ocorreu um erro!</strong> Todos os emails precisam ser válidos!');
+                                return;
+                            }
+                    }
+                    var data = {emails: emails, template:'<?php echo substr($this->layout,10); ?>', titulo:title_msg+' (TESTE)'};
+                    $.post('<?php echo $this->site; ?>/index/send-test-email', data, function (e) {
+                        var m = jQuery.parseJSON(e);
+                        
+                        if (m.success) {
+                            $('.msg-form').text(m.msg);
+                            $('.msg-form').attr('class','msg-form text-'+m.classe);
+                            $('#myModalSucess').modal('show');
+                          
+                            setTimeout(function () {
+                                $('#myModalSucess,#myModal').modal('hide');
+                            }, 8000);
+                        } else {
+                            mensagemErro(m.msg);
+                        }
+                    });
+
+                });
+                $('#myModal').on('shown.bs.modal', function () {
+                    $('#emails').focus();
+                });
+            });
+
+            function mensagemErro(msg) {
+                var html = ['<div class="alert alert-danger alert-dismissible fade in error-msg" role="alert">',
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Fechar"><span aria-hidden="true">×</span></button>',
+                    '<p>' + msg + '</p>',
+                    '</div>'].join("");
+                $('.error-msg').append(html);
+                $('#myModal').modal('show');
+                $('#emails').empty().focus();
+
+                setTimeout(function () {
+                    $('.error-msg').empty();
+                }, 8000);
+
+            }
+            function mensagemErroDate(msg) {
+                var html = ['<div class="alert alert-danger alert-dismissible fade in error-msg" role="alert">',
+                    '<button type="button" class="close" data-dismiss="alert" aria-label="Close" title="Fechar"><span aria-hidden="true">×</span></button>',
+                    '<p>' + msg + '</p>',
+                    '</div>'].join("");
+                $('.error-msg-date')
+                    .empty()
+                    .append(html);
+                setTimeout(function () {
+                    $('.error-msg-date').empty();
+                }, 8000);
+
+            }
+        </script>
+    </body>
+</html>

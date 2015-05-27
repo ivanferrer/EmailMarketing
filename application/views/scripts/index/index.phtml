@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sistema de Email Marketing</title>
+        <link href="<?php echo $this->site; ?>/css/bootstrap.css" rel="stylesheet" />
+        <link href="<?php echo $this->site; ?>/css/custom.css" rel="stylesheet" />
+      
+
+    </head>
+    <body>
+        <div id="wrap">
+            <div class="container">
+                <h1 class="top">Envio de Email Marketing</h1>
+                <p class="btn btn-default pull-right"><?php  echo $this->sair; ?></p>
+                <p>Escolha a opção abaixo:</p>
+                <ol>
+                    <li><a href="<?php echo $this->site; ?>/index/cadastrar-emails">Cadastrar Emails / Contatos</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/cadastrar-template">Cadastrar Template</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/gerenciar-emails">Gerenciar Contatos</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/gerenciar-templates">Gerenciar Templates</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/send-mail">Enviar Mensagem</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/gerenciar-mensagens-agendadas">Gerenciar Mensagens Agendadas</a></li>
+                    <li><a href="<?php echo $this->site; ?>/index/configurar-smtp">Configurar Serviço de Email</a></li>
+                </ol>
+            </div>
+        </div>
+    </body>
+</html>
