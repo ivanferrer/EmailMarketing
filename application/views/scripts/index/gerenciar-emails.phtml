@@ -34,11 +34,11 @@
                                     <th width="25%">Nome</th>
                                     <th width="20%">Texto Dinâmico</th>
                                     <th width="12%">Status</th>
-                                    <th width="13%">Ação</th>
+                                    <th width="13%">Ação <input type="checkbox" value="0" name="all" id="input_all_checks"></th>
                                 </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody class="obj-form-inputs">
                                 <?php
                                 if (!empty($this->emails)):
                                     foreach ($this->emails as $email):
@@ -50,7 +50,7 @@
                                             <td><?php echo $email->nome; ?></td>
                                             <td><?php echo ($email->dinamic_content != '') ? substr(strip_tags($email->dinamic_content),0,280).'...' : '&nbsp;'; ?></td>
                                              <td><?php echo ($email->status_permissao_envio) ? "Ativo" : "Recusado"  ?></td>
-                                            <td>&nbsp;<input type="checkbox" value="<?php echo $email->id_contato ?>" name="deletar[]" id="input_<?php echo $email->id_contato ?>">&nbsp;&nbsp;&nbsp;<a href="#" title="Excluir" data-file-del="<?php echo $email->id_contato ?>" id="tmp_<?php echo $email->id_contato ?>" class="btn btn-xs btn-danger delfile"><span class="glyphicon glyphicon-remove"></span> Excluir</a></td>
+                                            <td>&nbsp;<input type="checkbox" value="<?php echo $email->id_contato ?>" class="checks" name="deletar[]" id="input_<?php echo $email->id_contato ?>">&nbsp;&nbsp;&nbsp;<a href="#" title="Excluir" data-file-del="<?php echo $email->id_contato ?>" id="tmp_<?php echo $email->id_contato ?>" class="btn btn-xs btn-danger delfile"><span class="glyphicon glyphicon-remove"></span> Excluir</a></td>
                                         </tr>
                                         <?php
                                     endforeach;
@@ -89,29 +89,41 @@
 
             $(document).ready(function () {
 
+                $('#input_all_checks').on('click', function() {
+                  if ( $(this).is(':checked') ) {
+                      $('.obj-form-inputs input[type="checkbox"]').prop('checked',true);
+                        $('.obj-form').append('<div class="clearfix deletar-massa"><div class="form-group"><input type="button" onclick="deletaMassa()" class="btn btn-primary deleta-massa-btn" value="Exclusão em massa dos selecionados"></div></div>');
+                } else {
+                      $('.obj-form-inputs input[type="checkbox"]').prop('checked',false);
+                  }
+                    if ($('.obj-form-inputs input[type="checkbox"]:checked').length == 0) {
+                        $('.deletar-massa').remove();
+                    }
 
-                $('.obj-form input[type="checkbox"]').on('click', function () {
+                });
+
+                $('.obj-form-inputs input[type="checkbox"]').on('click', function () {
                     // console.log($('.table-bordered input[type="checkbox"]:checked').length);
                     if ($('.obj-form input[type="checkbox"]:checked').length == 1 && $('.deletar-massa').length == 0) {
                         // append item
                         $('.obj-form').append('<div class="clearfix deletar-massa"><div class="form-group"><input type="button" onclick="deletaMassa()" class="btn btn-primary deleta-massa-btn" value="Exclusão em massa dos selecionados"></div></div>');
 
                     } else {
-                        if ($('.obj-form input[type="checkbox"]:checked').length == 0) {
+                        if ($('.obj-form-inputs input[type="checkbox"]:checked').length == 0) {
                             $('.deletar-massa').remove();
                         }
                     }
 
 
                 });
-                $('.obj-form input[type="checkbox"]').each(function () {
+                $('.obj-form-inputs input[type="checkbox"]').each(function () {
 
-                    if ($('.obj-form input[type="checkbox"]:checked').length == 1 && $('.deletar-massa').length == 0) {
+                    if ($('.obj-form-inputs input[type="checkbox"]:checked').length == 1 && $('.deletar-massa').length == 0) {
                         // append item
                         $('.obj-form').append('<div class="clearfix deletar-massa"><div class="form-group"><input type="button" onclick="deletaMassa()" class="btn btn-primary deleta-massa-btn" value="Exclusão em massa dos selecionados"></div></div>');
 
                     } else {
-                        if ($('.obj-form input[type="checkbox"]:checked').length == 0) {
+                        if ($('.obj-form-inputs input[type="checkbox"]:checked').length == 0) {
                             $('.deletar-massa').remove();
                         }
                     }
@@ -145,14 +157,15 @@
                 $(document).delegate('.myModalMassa .ok-action','click',function(){
         
                     var array = [];
-                    $('.obj-form input[type="checkbox"]:checked').each(function (index, e) {
+                    $('.obj-form-inputs input[type="checkbox"]:checked').each(function (index, e) {
                         array[index] = e.value;
                     });
                     var data = array.join(',');
+                    console.log(data);
                     $.post('<?php echo $this->site; ?>/index/exclusao-massa-email', {ids: data}, function (e) {
                         var retorno = jQuery.parseJSON(e);
                         if (retorno.success) {
-                            $('.obj-form input[type="checkbox"]:checked').each(function (index, e) {
+                            $('.obj-form-inputs input[type="checkbox"]:checked').each(function (index, e) {
                                 $('#tmp_' + e.value).fadeOut('slow').remove();
                             });
                             $('<div class="alert alert-success alert-dismissible" role="alert"></div>')
