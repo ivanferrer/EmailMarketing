@@ -16,7 +16,7 @@ class MensagemController extends GenericController
 
     public function indexAction()
     {
-
+        //acesse o endereço da template através do caminho: http://osite.com.br/mensagem/index/id/nome-da-template
         $template = $this->_getParam('id');
 
         if ($template != null) {
