@@ -74,8 +74,8 @@ class CronController extends GenericController
             $titulo =  (isset($this->sessao_agenda->titulo)) ? $this->sessao_agenda->titulo : $data->agn_assunto;
 
 
-            $total_por_vez = 8;
-            $collection = $dados->getListContatosNotSend('inativo', $total_por_vez); //ENVIA 8 POR VEZ
+            $total_por_vez = 1000;
+            $collection = $dados->getListContatosNotSend('inativo', $total_por_vez); //ENVIA 1000 POR VEZ
 
             if (!empty($collection)) {
                 foreach ($collection as $contato) {

@@ -47,7 +47,10 @@ class Application_Model_SendMail extends Zend_View_Helper_BaseUrl
         }
 
 
-        $layout = ($arguments['template']) ? $arguments['template'] : 'template_emkt.phtml';
+        $layout = $arguments['template'];
+	if ($layout == '') {
+           die('layout não especificado');
+        }
         $email_send = $this->email_sender_client;
         $email_receive = ($arguments['email_recebe']) ? $arguments['email_recebe'] :  $this->email_sender_client;
         $name_receive = ($arguments['nome_recebe']) ? $arguments['nome_recebe'] : 'Usuário';

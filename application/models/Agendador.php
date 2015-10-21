@@ -62,7 +62,6 @@ class Application_Model_Agendador
         return $add;
 
     }
-
     
     public function deleteEnvio($where)
     {

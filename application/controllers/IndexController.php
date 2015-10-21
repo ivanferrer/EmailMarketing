@@ -420,7 +420,7 @@ class IndexController extends GenericController
 
             set_time_limit(0);
             ignore_user_abort(true);
-            $total_por_vez = 8;
+            $total_por_vez = 100;
             $collection = $dados->getListContatosNotSend('inativo', $total_por_vez); //ENVIA 8 POR VEZ
 
             $mSend = new Application_Model_SendMail();
