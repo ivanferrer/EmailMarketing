@@ -135,14 +135,14 @@ class Application_Model_SendMail extends Zend_View_Helper_BaseUrl
         $emailTo = $this->recebeEmail['email'];
         //  
         /*
-         * $emailTo = 'joaopedro@progiro.com.br';
+         * $emailTo = 'teste@servidor.com.br';
 
 
           $body.=$quem_recebe[0];
           $body.=$quem_recebe[1];
          */
-        //  $emailTo = 'ivanferrer@progiro.com.br';
-// ->addTo('infonatal@agenciaestacaobrasil.com.br', 'Nome') // para quem esta enviando
+        //  $emailTo = 'teste@servidor.com.br';
+// ->addTo('teste@servidor.com.br', 'Nome') // para quem esta enviando
         $mail = new Zend_Mail();
         $mail->setFrom($emailFrom, utf8_decode($nomeFrom)) // Quem esta enviando
         ->addTo($emailTo, utf8_decode($nomeTo)) // para quem esta enviando
